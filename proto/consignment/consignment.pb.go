@@ -156,7 +156,77 @@ func (m *Container) GetUserId() string {
 	return ""
 }
 
-type Response struct {
+type ListRequest struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListRequest) Reset()         { *m = ListRequest{} }
+func (m *ListRequest) String() string { return proto.CompactTextString(m) }
+func (*ListRequest) ProtoMessage()    {}
+func (*ListRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e5e5ab05dfa973d5, []int{2}
+}
+
+func (m *ListRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListRequest.Unmarshal(m, b)
+}
+func (m *ListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListRequest.Marshal(b, m, deterministic)
+}
+func (m *ListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListRequest.Merge(m, src)
+}
+func (m *ListRequest) XXX_Size() int {
+	return xxx_messageInfo_ListRequest.Size(m)
+}
+func (m *ListRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListRequest proto.InternalMessageInfo
+
+type ListResponse struct {
+	Consignments         []*Consignment `protobuf:"bytes,1,rep,name=consignments,proto3" json:"consignments,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *ListResponse) Reset()         { *m = ListResponse{} }
+func (m *ListResponse) String() string { return proto.CompactTextString(m) }
+func (*ListResponse) ProtoMessage()    {}
+func (*ListResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e5e5ab05dfa973d5, []int{3}
+}
+
+func (m *ListResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListResponse.Unmarshal(m, b)
+}
+func (m *ListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListResponse.Marshal(b, m, deterministic)
+}
+func (m *ListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListResponse.Merge(m, src)
+}
+func (m *ListResponse) XXX_Size() int {
+	return xxx_messageInfo_ListResponse.Size(m)
+}
+func (m *ListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListResponse proto.InternalMessageInfo
+
+func (m *ListResponse) GetConsignments() []*Consignment {
+	if m != nil {
+		return m.Consignments
+	}
+	return nil
+}
+
+type CreateResponse struct {
 	Created              bool         `protobuf:"varint,1,opt,name=created,proto3" json:"created,omitempty"`
 	Consignment          *Consignment `protobuf:"bytes,2,opt,name=consignment,proto3" json:"consignment,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
@@ -164,39 +234,39 @@ type Response struct {
 	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *Response) Reset()         { *m = Response{} }
-func (m *Response) String() string { return proto.CompactTextString(m) }
-func (*Response) ProtoMessage()    {}
-func (*Response) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e5e5ab05dfa973d5, []int{2}
+func (m *CreateResponse) Reset()         { *m = CreateResponse{} }
+func (m *CreateResponse) String() string { return proto.CompactTextString(m) }
+func (*CreateResponse) ProtoMessage()    {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_e5e5ab05dfa973d5, []int{4}
 }
 
-func (m *Response) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Response.Unmarshal(m, b)
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateResponse.Unmarshal(m, b)
 }
-func (m *Response) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Response.Marshal(b, m, deterministic)
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
 }
-func (m *Response) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Response.Merge(m, src)
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
 }
-func (m *Response) XXX_Size() int {
-	return xxx_messageInfo_Response.Size(m)
+func (m *CreateResponse) XXX_Size() int {
+	return xxx_messageInfo_CreateResponse.Size(m)
 }
-func (m *Response) XXX_DiscardUnknown() {
-	xxx_messageInfo_Response.DiscardUnknown(m)
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Response proto.InternalMessageInfo
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
 
-func (m *Response) GetCreated() bool {
+func (m *CreateResponse) GetCreated() bool {
 	if m != nil {
 		return m.Created
 	}
 	return false
 }
 
-func (m *Response) GetConsignment() *Consignment {
+func (m *CreateResponse) GetConsignment() *Consignment {
 	if m != nil {
 		return m.Consignment
 	}
@@ -206,7 +276,9 @@ func (m *Response) GetConsignment() *Consignment {
 func init() {
 	proto.RegisterType((*Consignment)(nil), "consignment.Consignment")
 	proto.RegisterType((*Container)(nil), "consignment.Container")
-	proto.RegisterType((*Response)(nil), "consignment.Response")
+	proto.RegisterType((*ListRequest)(nil), "consignment.ListRequest")
+	proto.RegisterType((*ListResponse)(nil), "consignment.ListResponse")
+	proto.RegisterType((*CreateResponse)(nil), "consignment.CreateResponse")
 }
 
 func init() {
@@ -214,26 +286,29 @@ func init() {
 }
 
 var fileDescriptor_e5e5ab05dfa973d5 = []byte{
-	// 296 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x51, 0x4f, 0x4b, 0x3b, 0x31,
-	0x10, 0xfd, 0x6d, 0xff, 0xef, 0x04, 0x7e, 0x62, 0xc0, 0x1a, 0xf4, 0xe0, 0xb2, 0x5e, 0x7a, 0xaa,
-	0x50, 0xc1, 0x83, 0xd7, 0x82, 0xd0, 0x6b, 0x7a, 0xf2, 0xa4, 0x35, 0x19, 0xb6, 0x03, 0x36, 0x59,
-	0x92, 0xb4, 0x7e, 0x29, 0x3f, 0xa4, 0x6c, 0xb6, 0xab, 0x51, 0xf1, 0x36, 0xef, 0xbd, 0x99, 0x79,
-	0x2f, 0x19, 0xb8, 0xae, 0x9d, 0x0d, 0xf6, 0x46, 0x59, 0xe3, 0xa9, 0x32, 0x3b, 0x34, 0x21, 0xad,
-	0xe7, 0x51, 0xe5, 0x2c, 0xa1, 0xca, 0xf7, 0x0c, 0xd8, 0xf2, 0x0b, 0xf3, 0xff, 0xd0, 0x23, 0x2d,
-	0xb2, 0x22, 0x9b, 0xe5, 0xb2, 0x47, 0x9a, 0x17, 0xc0, 0x34, 0x7a, 0xe5, 0xa8, 0x0e, 0x64, 0x8d,
-	0xe8, 0x45, 0x21, 0xa5, 0xf8, 0x14, 0x46, 0x6f, 0x48, 0xd5, 0x36, 0x88, 0x7e, 0x91, 0xcd, 0x86,
-	0xf2, 0x88, 0xf8, 0x1d, 0x80, 0xb2, 0x26, 0x6c, 0xc8, 0xa0, 0xf3, 0x62, 0x50, 0xf4, 0x67, 0x6c,
-	0x31, 0x9d, 0xa7, 0x71, 0x96, 0x9d, 0x2c, 0x93, 0x4e, 0x7e, 0x09, 0xf9, 0x01, 0xbd, 0xc7, 0xd7,
-	0x27, 0xd2, 0x62, 0x18, 0xfd, 0x26, 0x2d, 0xb1, 0xd2, 0xe5, 0x0e, 0xf2, 0xcf, 0xa9, 0x5f, 0x59,
-	0xaf, 0x80, 0xa9, 0xbd, 0x0f, 0x76, 0x87, 0xae, 0x99, 0x6d, 0xb3, 0x42, 0x47, 0xad, 0x74, 0x13,
-	0xd5, 0x3a, 0xaa, 0xc8, 0xc4, 0xa8, 0xb9, 0x3c, 0x22, 0x7e, 0x0e, 0xe3, 0xbd, 0x6f, 0x87, 0x06,
-	0xad, 0xd0, 0xc0, 0x95, 0x2e, 0x9f, 0x61, 0x22, 0xd1, 0xd7, 0xd6, 0x78, 0xe4, 0x02, 0xc6, 0xca,
-	0xe1, 0x26, 0x60, 0x6b, 0x39, 0x91, 0x1d, 0xe4, 0xf7, 0x90, 0x7e, 0x69, 0xf4, 0x65, 0x0b, 0xf1,
-	0xf3, 0xa9, 0x5d, 0x2d, 0xd3, 0xe6, 0xc5, 0x23, 0x9c, 0xac, 0xb7, 0x54, 0xd7, 0x64, 0xaa, 0x35,
-	0xba, 0x03, 0x29, 0xe4, 0x0f, 0x70, 0xba, 0x8c, 0x9b, 0xd3, 0xbb, 0xfc, 0xb9, 0xee, 0xe2, 0xec,
-	0x9b, 0xd2, 0xc5, 0x2d, 0xff, 0xbd, 0x8c, 0xe2, 0xb9, 0x6f, 0x3f, 0x02, 0x00, 0x00, 0xff, 0xff,
-	0x5d, 0xef, 0xe4, 0xb7, 0x15, 0x02, 0x00, 0x00,
+	// 347 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x52, 0xcb, 0x4e, 0xeb, 0x30,
+	0x14, 0xbc, 0xe9, 0x3b, 0x27, 0xbd, 0xbd, 0x17, 0x2f, 0x8a, 0x69, 0x17, 0x44, 0x61, 0xd3, 0x55,
+	0x91, 0x8a, 0xc4, 0x02, 0xb1, 0xeb, 0x2a, 0x52, 0x57, 0xe9, 0x07, 0xa0, 0x92, 0x1c, 0xd2, 0x23,
+	0x51, 0x3b, 0xc4, 0x6e, 0xf9, 0x27, 0xc4, 0x47, 0xa2, 0xd8, 0x4d, 0x71, 0xcb, 0x63, 0xe7, 0x99,
+	0x39, 0x8f, 0x19, 0xdb, 0x70, 0x55, 0x94, 0x52, 0xcb, 0xeb, 0x54, 0x0a, 0x45, 0xb9, 0xd8, 0xa0,
+	0xd0, 0xee, 0x79, 0x6a, 0x54, 0x16, 0x38, 0x54, 0xf4, 0xee, 0x41, 0x30, 0xff, 0xc4, 0x6c, 0x00,
+	0x0d, 0xca, 0xb8, 0x17, 0x7a, 0x13, 0x3f, 0x69, 0x50, 0xc6, 0x42, 0x08, 0x32, 0x54, 0x69, 0x49,
+	0x85, 0x26, 0x29, 0x78, 0xc3, 0x08, 0x2e, 0xc5, 0x86, 0xd0, 0x79, 0x45, 0xca, 0xd7, 0x9a, 0x37,
+	0x43, 0x6f, 0xd2, 0x4e, 0xf6, 0x88, 0xdd, 0x02, 0xa4, 0x52, 0xe8, 0x15, 0x09, 0x2c, 0x15, 0x6f,
+	0x85, 0xcd, 0x49, 0x30, 0x1b, 0x4e, 0x5d, 0x3b, 0xf3, 0x5a, 0x4e, 0x9c, 0x4a, 0x36, 0x06, 0x7f,
+	0x87, 0x4a, 0xe1, 0xf3, 0x03, 0x65, 0xbc, 0x6d, 0xf6, 0xf5, 0x2c, 0x11, 0x67, 0xd1, 0x06, 0xfc,
+	0x43, 0xd7, 0x17, 0xaf, 0x97, 0x10, 0xa4, 0x5b, 0xa5, 0xe5, 0x06, 0xcb, 0xaa, 0xd7, 0x7a, 0x85,
+	0x9a, 0x8a, 0xb3, 0xca, 0xaa, 0x2c, 0x29, 0x27, 0x61, 0xac, 0xfa, 0xc9, 0x1e, 0xb1, 0x73, 0xe8,
+	0x6e, 0x95, 0x6d, 0x6a, 0x59, 0xa1, 0x82, 0x71, 0x16, 0xfd, 0x85, 0x60, 0x41, 0x4a, 0x27, 0xf8,
+	0xb2, 0x45, 0xa5, 0xa3, 0x05, 0xf4, 0x2d, 0x54, 0x85, 0x14, 0x0a, 0xd9, 0x3d, 0xf4, 0x9d, 0x3c,
+	0x8a, 0x7b, 0x26, 0x24, 0x3f, 0x0d, 0x59, 0x9f, 0x93, 0xa3, 0xea, 0xe8, 0x09, 0x06, 0xf3, 0x12,
+	0x57, 0x1a, 0x0f, 0xf3, 0x38, 0x74, 0x53, 0xc3, 0xd8, 0x54, 0xbd, 0xa4, 0x86, 0xec, 0x0e, 0xdc,
+	0x57, 0x33, 0xd1, 0x7e, 0x5b, 0xe4, 0x16, 0xcf, 0xde, 0x3c, 0xf8, 0xb7, 0x5c, 0x53, 0x51, 0x90,
+	0xc8, 0x97, 0x58, 0xee, 0x28, 0x45, 0xb6, 0x80, 0x33, 0xbb, 0xdb, 0x7d, 0xfb, 0x1f, 0xe7, 0x8d,
+	0xc6, 0xc7, 0xca, 0x91, 0xeb, 0xe8, 0x0f, 0x8b, 0xe1, 0x7f, 0x75, 0x2f, 0x4e, 0x87, 0x3a, 0x19,
+	0xe6, 0xdc, 0xe2, 0xe8, 0xe2, 0x1b, 0xa5, 0x1e, 0xf5, 0xd8, 0x31, 0x7f, 0xf4, 0xe6, 0x23, 0x00,
+	0x00, 0xff, 0xff, 0xde, 0xec, 0x7d, 0x3f, 0xca, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -248,7 +323,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ShippingServiceClient interface {
-	CreateConsignment(ctx context.Context, in *Consignment, opts ...grpc.CallOption) (*Response, error)
+	CreateConsignment(ctx context.Context, in *Consignment, opts ...grpc.CallOption) (*CreateResponse, error)
+	ListConsignments(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 }
 
 type shippingServiceClient struct {
@@ -259,9 +335,18 @@ func NewShippingServiceClient(cc *grpc.ClientConn) ShippingServiceClient {
 	return &shippingServiceClient{cc}
 }
 
-func (c *shippingServiceClient) CreateConsignment(ctx context.Context, in *Consignment, opts ...grpc.CallOption) (*Response, error) {
-	out := new(Response)
+func (c *shippingServiceClient) CreateConsignment(ctx context.Context, in *Consignment, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, "/consignment.ShippingService/CreateConsignment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *shippingServiceClient) ListConsignments(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	out := new(ListResponse)
+	err := c.cc.Invoke(ctx, "/consignment.ShippingService/ListConsignments", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -270,7 +355,8 @@ func (c *shippingServiceClient) CreateConsignment(ctx context.Context, in *Consi
 
 // ShippingServiceServer is the server API for ShippingService service.
 type ShippingServiceServer interface {
-	CreateConsignment(context.Context, *Consignment) (*Response, error)
+	CreateConsignment(context.Context, *Consignment) (*CreateResponse, error)
+	ListConsignments(context.Context, *ListRequest) (*ListResponse, error)
 }
 
 func RegisterShippingServiceServer(s *grpc.Server, srv ShippingServiceServer) {
@@ -295,6 +381,24 @@ func _ShippingService_CreateConsignment_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShippingService_ListConsignments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShippingServiceServer).ListConsignments(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/consignment.ShippingService/ListConsignments",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShippingServiceServer).ListConsignments(ctx, req.(*ListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _ShippingService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "consignment.ShippingService",
 	HandlerType: (*ShippingServiceServer)(nil),
@@ -302,6 +406,10 @@ var _ShippingService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateConsignment",
 			Handler:    _ShippingService_CreateConsignment_Handler,
+		},
+		{
+			MethodName: "ListConsignments",
+			Handler:    _ShippingService_ListConsignments_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

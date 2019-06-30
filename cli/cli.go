@@ -48,7 +48,15 @@ func main() {
 
 	r, err := client.CreateConsignment(context.Background(), consignment)
 	if err != nil {
-		log.Fatalf("Could not greet: %v", err)
+		log.Fatalf("Could not create consignment: %v", err)
 	}
 	log.Printf("Created: %t", r.Created)
+
+	listResponse, err := client.ListConsignments(context.Background(), &pb.ListRequest{})
+	if err != nil {
+		log.Fatalf("Could not list consignments: %v", err)
+	}
+	for _, v := range listResponse.Consignments {
+		log.Println(v)
+	}
 }

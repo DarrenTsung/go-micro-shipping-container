@@ -17,6 +17,7 @@ const (
 
 type repository interface {
 	Create(*pb.Consignment) (*pb.Consignment, error)
+	List() []*pb.Consignment
 }
 
 // Dummy repository
@@ -34,17 +35,25 @@ func (repo *Repository) Create(consignment *pb.Consignment) (*pb.Consignment, er
 	return consignment, nil
 }
 
+func (repo *Repository) List() []*pb.Consignment {
+	return repo.consignments
+}
+
 type service struct {
 	repo repository
 }
 
-func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment) (*pb.Response, error) {
+func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment) (*pb.CreateResponse, error) {
 	consignment, err := s.repo.Create(req)
 	if err != nil {
 		return nil, err
 	}
 
-	return &pb.Response{Created: true, Consignment: consignment}, nil
+	return &pb.CreateResponse{Created: true, Consignment: consignment}, nil
+}
+
+func (s *service) ListConsignments(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
+	return &pb.ListResponse{Consignments: s.repo.List()}, nil
 }
 
 func main() {

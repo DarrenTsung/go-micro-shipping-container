@@ -4,7 +4,8 @@ syntax = "proto3";
 package consignment;
 
 service ShippingService {
-    rpc CreateConsignment(Consignment) returns (Response) {}
+    rpc CreateConsignment(Consignment) returns (CreateResponse) {}
+    rpc ListConsignments(ListRequest) returns (ListResponse) {}
 }
 
 message Consignment {
@@ -22,7 +23,12 @@ message Container {
     string user_id = 4;
 }
 
-message Response {
+message ListRequest {}
+message ListResponse {
+    repeated Consignment consignments = 1;
+}
+
+message CreateResponse {
     bool created = 1;
     Consignment consignment = 2;
 }
