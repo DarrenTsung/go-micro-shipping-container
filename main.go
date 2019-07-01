@@ -3,21 +3,15 @@ package main
 import (
 	"context"
 	"log"
-	"net"
 	"sync"
 
 	pb "github.com/DarrenTsung/go-micro-shipping-container/proto/consignment"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
-)
-
-const (
-	port = ":50051"
+	"github.com/micro/go-micro"
 )
 
 type repository interface {
 	Create(*pb.Consignment) (*pb.Consignment, error)
-	List() []*pb.Consignment
+	ListAll() []*pb.Consignment
 }
 
 // Dummy repository
@@ -35,7 +29,7 @@ func (repo *Repository) Create(consignment *pb.Consignment) (*pb.Consignment, er
 	return consignment, nil
 }
 
-func (repo *Repository) List() []*pb.Consignment {
+func (repo *Repository) ListAll() []*pb.Consignment {
 	return repo.consignments
 }
 
@@ -43,35 +37,33 @@ type service struct {
 	repo repository
 }
 
-func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment) (*pb.CreateResponse, error) {
+func (s *service) CreateConsignment(ctx context.Context, req *pb.Consignment, res *pb.CreateResponse) error {
 	consignment, err := s.repo.Create(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &pb.CreateResponse{Created: true, Consignment: consignment}, nil
+	res.Created = true
+	res.Consignment = consignment
+
+	return nil
 }
 
-func (s *service) ListConsignments(ctx context.Context, req *pb.ListRequest) (*pb.ListResponse, error) {
-	return &pb.ListResponse{Consignments: s.repo.List()}, nil
+func (s *service) ListConsignments(ctx context.Context, req *pb.ListRequest, res *pb.ListResponse) error {
+	res.Consignments = s.repo.ListAll()
+	return nil
 }
 
 func main() {
 	repo := &Repository{}
+	srv := micro.NewService(
+		micro.Name("shippy.service.consignment"),
+	)
 
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
-	}
-
-	s := grpc.NewServer()
-	pb.RegisterShippingServiceServer(s, &service{repo})
-
-	reflection.Register(s)
-
-	log.Println("Running on port:", port)
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("Failed to server: %v", err)
+	srv.Init()
+	pb.RegisterShippingServiceHandler(srv.Server(), &service{repo})
+	if err := srv.Run(); err != nil {
+		log.Fatalf("Failed to run server: %v", err)
 	}
 	log.Println("Server finished, exiting normally")
 }

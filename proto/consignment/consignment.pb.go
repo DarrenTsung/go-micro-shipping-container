@@ -4,11 +4,15 @@
 package consignment
 
 import (
-	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	grpc "google.golang.org/grpc"
 	math "math"
+)
+
+import (
+	client "github.com/micro/go-micro/client"
+	server "github.com/micro/go-micro/server"
+	context "golang.org/x/net/context"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -313,105 +317,73 @@ var fileDescriptor_e5e5ab05dfa973d5 = []byte{
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
-var _ grpc.ClientConn
+var _ client.Option
+var _ server.Option
 
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion4
+// Client API for ShippingService service
 
-// ShippingServiceClient is the client API for ShippingService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type ShippingServiceClient interface {
-	CreateConsignment(ctx context.Context, in *Consignment, opts ...grpc.CallOption) (*CreateResponse, error)
-	ListConsignments(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
+	CreateConsignment(ctx context.Context, in *Consignment, opts ...client.CallOption) (*CreateResponse, error)
+	ListConsignments(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*ListResponse, error)
 }
 
 type shippingServiceClient struct {
-	cc *grpc.ClientConn
+	c           client.Client
+	serviceName string
 }
 
-func NewShippingServiceClient(cc *grpc.ClientConn) ShippingServiceClient {
-	return &shippingServiceClient{cc}
+func NewShippingServiceClient(serviceName string, c client.Client) ShippingServiceClient {
+	if c == nil {
+		c = client.NewClient()
+	}
+	if len(serviceName) == 0 {
+		serviceName = "consignment"
+	}
+	return &shippingServiceClient{
+		c:           c,
+		serviceName: serviceName,
+	}
 }
 
-func (c *shippingServiceClient) CreateConsignment(ctx context.Context, in *Consignment, opts ...grpc.CallOption) (*CreateResponse, error) {
+func (c *shippingServiceClient) CreateConsignment(ctx context.Context, in *Consignment, opts ...client.CallOption) (*CreateResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ShippingService.CreateConsignment", in)
 	out := new(CreateResponse)
-	err := c.cc.Invoke(ctx, "/consignment.ShippingService/CreateConsignment", in, out, opts...)
+	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *shippingServiceClient) ListConsignments(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+func (c *shippingServiceClient) ListConsignments(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*ListResponse, error) {
+	req := c.c.NewRequest(c.serviceName, "ShippingService.ListConsignments", in)
 	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/consignment.ShippingService/ListConsignments", in, out, opts...)
+	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ShippingServiceServer is the server API for ShippingService service.
-type ShippingServiceServer interface {
-	CreateConsignment(context.Context, *Consignment) (*CreateResponse, error)
-	ListConsignments(context.Context, *ListRequest) (*ListResponse, error)
+// Server API for ShippingService service
+
+type ShippingServiceHandler interface {
+	CreateConsignment(context.Context, *Consignment, *CreateResponse) error
+	ListConsignments(context.Context, *ListRequest, *ListResponse) error
 }
 
-func RegisterShippingServiceServer(s *grpc.Server, srv ShippingServiceServer) {
-	s.RegisterService(&_ShippingService_serviceDesc, srv)
+func RegisterShippingServiceHandler(s server.Server, hdlr ShippingServiceHandler, opts ...server.HandlerOption) {
+	s.Handle(s.NewHandler(&ShippingService{hdlr}, opts...))
 }
 
-func _ShippingService_CreateConsignment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Consignment)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ShippingServiceServer).CreateConsignment(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/consignment.ShippingService/CreateConsignment",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShippingServiceServer).CreateConsignment(ctx, req.(*Consignment))
-	}
-	return interceptor(ctx, in, info, handler)
+type ShippingService struct {
+	ShippingServiceHandler
 }
 
-func _ShippingService_ListConsignments_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ShippingServiceServer).ListConsignments(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/consignment.ShippingService/ListConsignments",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShippingServiceServer).ListConsignments(ctx, req.(*ListRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+func (h *ShippingService) CreateConsignment(ctx context.Context, in *Consignment, out *CreateResponse) error {
+	return h.ShippingServiceHandler.CreateConsignment(ctx, in, out)
 }
 
-var _ShippingService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "consignment.ShippingService",
-	HandlerType: (*ShippingServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "CreateConsignment",
-			Handler:    _ShippingService_CreateConsignment_Handler,
-		},
-		{
-			MethodName: "ListConsignments",
-			Handler:    _ShippingService_ListConsignments_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/consignment/consignment.proto",
+func (h *ShippingService) ListConsignments(ctx context.Context, in *ListRequest, out *ListResponse) error {
+	return h.ShippingServiceHandler.ListConsignments(ctx, in, out)
 }
