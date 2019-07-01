@@ -1,8 +1,8 @@
 FROM golang:1.12 as builder
 
-WORKDIR /go/src/github.com/DarrenTsung/go-micro-shipping-container/consignment-service
-
 RUN go get -u github.com/golang/dep/cmd/dep
+
+WORKDIR /go/src/github.com/DarrenTsung/go-micro-shipping-container/consignment-service
 
 COPY . .
 
