@@ -1,0 +1,21 @@
+version: "3.2"
+services:
+  app:
+    build: ./
+    stdin_open: true
+    tty: true
+    command: bash
+    privileged: true
+    environment:
+      GOCACHE: /go/cache
+      MICRO_SERVER_ADDRESS: :50051
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./:/app:cached
+      - ~/.ssh:/root/.ssh
+      - ~/.gitconfig:/root/.gitconfig
+      - go-cache:/go
+
+volumes:
+  go-cache:
