@@ -5,7 +5,7 @@ import (
 	"log"
 	"sync"
 
-	pb "github.com/DarrenTsung/go-micro-shipping-container/proto/consignment"
+	pb "github.com/DarrenTsung/go-micro-shipping-container/consignment-service/proto"
 	"github.com/micro/go-micro"
 )
 

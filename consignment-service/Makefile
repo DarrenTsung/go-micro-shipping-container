@@ -1,6 +1,6 @@
 gen:
 	protoc -I. --go_out=plugins=micro:. \
-		proto/consignment/consignment.proto
+		proto/consignment.proto
 
 build:
 	docker build -t shippy-service-consignment .
