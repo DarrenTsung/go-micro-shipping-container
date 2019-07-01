@@ -1,12 +1,23 @@
-FROM golang:1.12
+FROM golang:alpine as builder
 
-RUN apt-get update && apt-get install -y unzip
-WORKDIR /tmp
-RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v3.8.0/protoc-3.8.0-linux-x86_64.zip
-RUN unzip protoc-3.8.0-linux-x86_64.zip
-RUN mv ./bin/protoc /usr/local/bin
-RUN go get -u github.com/micro/protobuf/proto github.com/micro/protobuf/protoc-gen-go
+RUN apk --no-cache add git
 
+WORKDIR /app/shippy-service-consignment
+
+COPY . .
+
+RUN go mod download
+
+# The flags will allow us to run this binary in Alpine.
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix ogo -o shippy-service-consignment
+
+FROM alpine:latest
+
+RUN apk --no-cache add ca-certificates
+
+RUN mkdir /app
 WORKDIR /app
 
-CMD ["bash"]
+COPY --from=builder /app/shippy-service-consignment/shippy-service-consignment .
+
+CMD ["./shippy-service-consignment"]
