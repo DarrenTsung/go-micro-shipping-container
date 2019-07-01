@@ -57,7 +57,7 @@ func (s *service) ListConsignments(ctx context.Context, req *pb.ListRequest, res
 func main() {
 	repo := &Repository{}
 	srv := micro.NewService(
-		micro.Name("shippy.service.consignment"),
+		micro.Name("shippy.consignment.service"),
 	)
 
 	srv.Init()
