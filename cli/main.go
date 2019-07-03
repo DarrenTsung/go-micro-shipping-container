@@ -5,14 +5,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"os"
 
 	pb "github.com/DarrenTsung/go-micro-shipping-container/consignment-service/proto"
 	"github.com/micro/go-micro"
-)
-
-const (
-	defaultFilename = "consignment.json"
 )
 
 func parseFile(file string) (*pb.Consignment, error) {
@@ -32,14 +27,26 @@ func main() {
 
 	client := pb.NewShippingServiceClient("shippy.consignment.service", service.Client())
 
-	file := defaultFilename
-	if len(os.Args) > 1 {
-		file = os.Args[1]
-	}
-
-	consignment, err := parseFile(file)
-	if err != nil {
-		log.Fatalf("Could not parse file: %v", err)
+	consignment := &pb.Consignment{
+		Description: "This is a test consignment",
+		Weight:      55000,
+		Containers: []*pb.Container{
+			&pb.Container{
+				CustomerId: "customer001",
+				UserId:     "user001",
+				Origin:     "Manchester, United Kingdom",
+			},
+			&pb.Container{
+				CustomerId: "customer002",
+				UserId:     "user001",
+				Origin:     "Manchester, United Kingdom",
+			},
+			&pb.Container{
+				CustomerId: "customer003",
+				UserId:     "user002",
+				Origin:     "Sheffield, United Kingdom",
+			},
+		},
 	}
 
 	r, err := client.CreateConsignment(context.Background(), consignment)
